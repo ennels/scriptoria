@@ -8,11 +8,22 @@ APPS="$HOME/.local/share/applications"
 BIN="$HOME/.local/bin"
 mkdir -p "$APPS" "$BIN"
 
+# Find uv even when it isn't on PATH (app-menu launches get a minimal PATH).
+UV="$(command -v uv || true)"
+for p in "$HOME/.local/bin/uv" "$HOME/.cargo/bin/uv" /usr/local/bin/uv /opt/homebrew/bin/uv; do
+  [ -z "$UV" ] && [ -x "$p" ] && UV="$p"
+done
+if [ -z "$UV" ]; then
+  echo "uv isn't installed. Install it, then re-run this script:"
+  echo "  curl -LsSf https://astral.sh/uv/install.sh | sh"
+  exit 1
+fi
+
 # Wrapper: run from the project dir so uv finds the venv + database.
 cat > "$BIN/scriptoria" <<EOF
 #!/usr/bin/env bash
 cd "$ROOT"
-exec uv run scriptoria
+exec "$UV" run scriptoria
 EOF
 chmod +x "$BIN/scriptoria"
 

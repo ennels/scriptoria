@@ -29,6 +29,9 @@ browser off a local SQLite database. No internet needed once built.
 
 ## Install on a new machine
 
+Needs [uv](https://docs.astral.sh/uv/). If `uv` isn't found:
+`curl -LsSf https://astral.sh/uv/install.sh | sh && source ~/.local/bin/env`
+
 ```bash
 git clone https://github.com/ennels/scriptoria.git ~/Projects/scriptoria
 cd ~/Projects/scriptoria
