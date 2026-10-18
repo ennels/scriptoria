@@ -223,14 +223,42 @@ if WEB.exists():
         return FileResponse(WEB / "index.html")
 
 
-def run():
-    import uvicorn
+HOST, PORT = "127.0.0.1", 8701
+
+
+def _open_browser(url: str) -> None:
+    """Open the reader without the browser's own console chatter (Chromium
+    prints zygote/session messages when handing off to an open window)."""
+    import shutil
+    import subprocess
+    import sys
     import webbrowser
+    opener = shutil.which("xdg-open") if sys.platform.startswith("linux") else None
+    if opener:
+        subprocess.Popen([opener, url], stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+                         stderr=subprocess.DEVNULL, start_new_session=True)
+    else:
+        webbrowser.open(url)
+
+
+def _already_running() -> bool:
+    import socket
+    with socket.socket() as s:
+        s.settimeout(0.3)
+        return s.connect_ex((HOST, PORT)) == 0
+
+
+def run():
     import threading
-    url = "http://127.0.0.1:8701"
-    threading.Timer(1.0, lambda: webbrowser.open(url)).start()
+    import uvicorn
+    url = f"http://{HOST}:{PORT}"
+    if _already_running():                     # e.g. launcher clicked twice
+        print(f"Scriptoria is already running at {url}; opening it.")
+        _open_browser(url)
+        return
+    threading.Timer(1.0, _open_browser, args=(url,)).start()
     print(f"Scriptoria running at {url}  (Ctrl+C to stop)")
-    uvicorn.run(app, host="127.0.0.1", port=8701, log_level="warning")
+    uvicorn.run(app, host=HOST, port=PORT, log_level="warning")
 
 
 if __name__ == "__main__":
