@@ -42,7 +42,7 @@ git clone https://github.com/ennels/scriptoria.git ~/Projects/scriptoria
 cd ~/Projects/scriptoria
 unzip ~/Downloads/scriptoria-db.zip      # prebuilt database -> scriptoria.db
 uv sync
-bash scripts/install-launcher.sh         # app-menu entry (optional)
+bash scripts/install-launcher.sh         # app-menu entry + desktop icon (optional)
 uv run scriptoria                        # opens http://127.0.0.1:8701
 ```
 
