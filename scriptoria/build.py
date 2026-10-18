@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+import urllib.parse
 import urllib.request
 import zipfile
 from pathlib import Path
@@ -25,6 +26,19 @@ SOURCES = {
     "strongs-greek.js": "https://raw.githubusercontent.com/openscriptures/strongs/master/greek/strongs-greek-dictionary.js",
     "strongs-hebrew.js": "https://raw.githubusercontent.com/openscriptures/strongs/master/hebrew/strongs-hebrew-dictionary.js",
     "cross-references.zip": "https://a.openbible.info/data/cross-references.zip",
+}
+
+# STEPBible tagged originals (CC BY). Saved locally under short names; the originals
+# importer keys on the TAGNT/TAHOT prefix for Greek vs Hebrew.
+_STEP_BASE = "https://raw.githubusercontent.com/STEPBible/STEPBible-Data/master/"
+_STEP_DIR = "Translators Amalgamated OT+NT/"
+STEP_FILES = {
+    "TAGNT_Mat-Jhn.txt": "TAGNT Mat-Jhn - Translators Amalgamated Greek NT - STEPBible.org CC-BY.txt",
+    "TAGNT_Act-Rev.txt": "TAGNT Act-Rev - Translators Amalgamated Greek NT - STEPBible.org CC-BY.txt",
+    "TAHOT_Gen-Deu.txt": "TAHOT Gen-Deu - Translators Amalgamated Hebrew OT - STEPBible.org CC BY.txt",
+    "TAHOT_Jos-Est.txt": "TAHOT Jos-Est - Translators Amalgamated Hebrew OT - STEPBible.org CC BY.txt",
+    "TAHOT_Job-Sng.txt": "TAHOT Job-Sng - Translators Amalgamated Hebrew OT - STEPBible.org CC BY.txt",
+    "TAHOT_Isa-Mal.txt": "TAHOT Isa-Mal - Translators Amalgamated Hebrew OT - STEPBible.org CC BY.txt",
 }
 
 
@@ -46,11 +60,15 @@ def main(argv=None) -> int:
     ap.add_argument("--bibles-dir", help="thiagobodruk json/ directory of <lang>_<code>.json files")
     ap.add_argument("--versions", default="default",
                     help="comma-separated codes (kjv,asv,...), or 'default', 'en' (all English), 'all'")
+    ap.add_argument("--no-originals", action="store_true", help="skip the Greek/Hebrew STEPBible import")
     ap.add_argument("--db", default=str(DEFAULT_DB))
     args = ap.parse_args(argv)
 
     print("==> Downloading public-domain sources")
     paths = {n: fetch(n, u) for n, u in SOURCES.items()}
+    if not args.no_originals:
+        for local, remote in STEP_FILES.items():
+            fetch(local, _STEP_BASE + urllib.parse.quote(_STEP_DIR + remote))
     xref_txt = DATA / "cross_references.txt"
     if not xref_txt.exists():
         with zipfile.ZipFile(paths["cross-references.zip"]) as z:
@@ -102,13 +120,10 @@ def main(argv=None) -> int:
     print("  cross-references")
     print(f"    {import_crossrefs(con, xref_txt)['cross_refs']} links")
 
-    # Originals (STEPBible) — added by importers/originals.py when present.
-    try:
-        from .importers.originals import import_originals  # noqa
-        print("  Greek/Hebrew originals")
+    if not args.no_originals:
+        from .importers.originals import import_originals
+        print("  Greek/Hebrew originals (STEPBible)")
         print(f"    {import_originals(con, DATA)}")
-    except ImportError:
-        print("  (originals importer not installed yet - skipping Greek/Hebrew)")
 
     con.close()
     print(f"Done -> {args.db}")
