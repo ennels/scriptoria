@@ -19,7 +19,7 @@ import json
 import sqlite3
 from pathlib import Path
 
-from ..books import to_osis
+from ..books import to_osis, BOOKS
 from . import VerseResolver
 
 
@@ -31,6 +31,19 @@ def _rows_from_json(data) -> list[tuple[str, int, int, str]]:
         if text is None:
             return
         rows.append((str(book), int(ch), int(vs), str(text)))
+
+    # E) thiagobodruk: list of 66 book objects, chapters as list-of-lists, by position.
+    if (isinstance(data, list) and data and isinstance(data[0], dict)
+            and isinstance(data[0].get("chapters"), list) and data[0]["chapters"]
+            and isinstance(data[0]["chapters"][0], list)):
+        for i, book in enumerate(data):
+            if i >= len(BOOKS):
+                break
+            osis = BOOKS[i]["osis"]  # canonical order, so position is the key (names are localized)
+            for ci, chap in enumerate(book["chapters"]):
+                for vi, text in enumerate(chap):
+                    add(osis, ci + 1, vi + 1, text)
+        return rows
 
     if isinstance(data, list):  # D) flat rows
         for r in data:
@@ -68,7 +81,7 @@ def import_translation(
     con: sqlite3.Connection, path: str | Path, code: str, name: str,
     language: str = "en", license: str = "",
 ) -> dict:
-    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    data = json.loads(Path(path).read_text(encoding="utf-8-sig"))  # tolerate a BOM
     rows = _rows_from_json(data)
     if not rows:
         raise ValueError(f"No verses parsed from {path}")

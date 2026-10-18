@@ -40,9 +40,12 @@ def fetch(name: str, url: str) -> Path:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Build the Scriptoria database")
-    ap.add_argument("--translations", help="path to your translations JSON")
-    ap.add_argument("--code", default="", help="translation code (e.g. WEB)")
-    ap.add_argument("--name", default="", help="translation display name")
+    ap.add_argument("--translations", help="path to a single translations JSON")
+    ap.add_argument("--code", default="", help="translation code (with --translations)")
+    ap.add_argument("--name", default="", help="display name (with --translations)")
+    ap.add_argument("--bibles-dir", help="thiagobodruk json/ directory of <lang>_<code>.json files")
+    ap.add_argument("--versions", default="default",
+                    help="comma-separated codes (kjv,asv,...), or 'default', 'en' (all English), 'all'")
     ap.add_argument("--db", default=str(DEFAULT_DB))
     args = ap.parse_args(argv)
 
@@ -60,6 +63,32 @@ def main(argv=None) -> int:
     print("  seed translation (KJV)")
     r = import_translation(con, paths["kjv.json"], "KJV", "King James Version (1769)", license="Public Domain")
     print(f"    {r['verses']} verses" + (f"  (unknown books: {r['unknown_books']})" if r["unknown_books"] else ""))
+
+    if args.bibles_dir:
+        from .versions import DEFAULT, meta_for
+        jdir = Path(args.bibles_dir)
+        files = sorted(jdir.glob("*.json"))
+        sel = args.versions.strip().lower()
+        if sel == "all":
+            chosen = files
+        elif sel == "en":
+            chosen = [f for f in files if f.stem.startswith("en_") or f.stem == "en"]
+        elif sel == "default":
+            codes = set(DEFAULT)
+            chosen = [f for f in files if f.stem.replace("en_", "") in codes]
+        else:
+            want = {c.strip() for c in sel.split(",")}
+            chosen = [f for f in files if f.stem in want or f.stem.replace("en_", "") in want]
+        print(f"  importing {len(chosen)} translation(s) from {jdir}")
+        for f in chosen:
+            code, name, lang = meta_for(f)
+            if code == "KJV":  # already seeded
+                continue
+            try:
+                r = import_translation(con, f, code, name, language=lang)
+                print(f"    {code:8} {r['verses']} verses" + (f"  (unknown: {r['unknown_books']})" if r["unknown_books"] else ""))
+            except Exception as e:
+                print(f"    {code:8} SKIPPED ({type(e).__name__}: {e})", file=sys.stderr)
 
     if args.translations:
         if not (args.code and args.name):
