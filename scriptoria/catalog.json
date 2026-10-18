@@ -1,0 +1,1222 @@
+[
+ {
+  "abbr": "en_t4t",
+  "name": "A Translation for Translators",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 5647580,
+  "code": "T4T"
+ },
+ {
+  "abbr": "en_asv",
+  "name": "American Standard Version 1901",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4246186,
+  "code": "ASV"
+ },
+ {
+  "abbr": "en_amp",
+  "name": "Amplified Bible",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4893065,
+  "code": "AMP"
+ },
+ {
+  "abbr": "en_bbe",
+  "name": "Basic English",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4276063,
+  "code": "BBE"
+ },
+ {
+  "abbr": "en_bsb",
+  "name": "Berean Standard Bible",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 3972433,
+  "code": "BSB"
+ },
+ {
+  "abbr": "en_csb",
+  "name": "Christian Standard Bible",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 3992040,
+  "code": "CSB"
+ },
+ {
+  "abbr": "en_cev",
+  "name": "Contemporary English Version",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 3418268,
+  "code": "CEV"
+ },
+ {
+  "abbr": "en_darby",
+  "name": "Darby's Translation 1890",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4190567,
+  "code": "DARBY"
+ },
+ {
+  "abbr": "en_dra",
+  "name": "Douay-Rheims American 1899",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4175061,
+  "code": "DRA"
+ },
+ {
+  "abbr": "en_esv",
+  "name": "English Standard Version",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4057969,
+  "code": "ESV"
+ },
+ {
+  "abbr": "en_fbv",
+  "name": "Free Bible Version",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4104133,
+  "code": "FBV"
+ },
+ {
+  "abbr": "en_gnv",
+  "name": "Geneva Bible",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4284613,
+  "code": "GNV"
+ },
+ {
+  "abbr": "en_gnt",
+  "name": "Good News Translation",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 3868380,
+  "code": "GNT"
+ },
+ {
+  "abbr": "en_jub",
+  "name": "Jubilee Bible",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4233394,
+  "code": "JUB"
+ },
+ {
+  "abbr": "en_kjv",
+  "name": "King James Version",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4247581,
+  "code": "KJV"
+ },
+ {
+  "abbr": "en_kjva",
+  "name": "King James Version with Apocrypha",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4247581,
+  "code": "KJVA"
+ },
+ {
+  "abbr": "en_leb",
+  "name": "Lexham English Bible",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4221297,
+  "code": "LEB"
+ },
+ {
+  "abbr": "en_lsv",
+  "name": "Literal Standard Version",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4246926,
+  "code": "LSV"
+ },
+ {
+  "abbr": "en_mbsb",
+  "name": "Majority Standard Bible",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 3984381,
+  "code": "MBSB"
+ },
+ {
+  "abbr": "en_nasb",
+  "name": "New American Standard Bible 2020",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4230052,
+  "code": "NASB"
+ },
+ {
+  "abbr": "en_niv",
+  "name": "New International Version",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 3973116,
+  "code": "NIV"
+ },
+ {
+  "abbr": "en_nkjv",
+  "name": "New King James Version",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4149343,
+  "code": "NKJV"
+ },
+ {
+  "abbr": "en_nlt",
+  "name": "New Living Translation",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4147844,
+  "code": "NLT"
+ },
+ {
+  "abbr": "en_nmv",
+  "name": "New Messianic Version Bible",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 5544224,
+  "code": "NMV"
+ },
+ {
+  "abbr": "en_engrv",
+  "name": "Revised Version 1885",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4249761,
+  "code": "ENGRV"
+ },
+ {
+  "abbr": "en_kjvcpb",
+  "name": "The Cambridge Paragraph Bible of the Authorized English Version",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4248957,
+  "code": "KJVCPB"
+ },
+ {
+  "abbr": "en_tojb2011",
+  "name": "The Orthodox Jewish Bible",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4682210,
+  "code": "TOJB2011"
+ },
+ {
+  "abbr": "en_web",
+  "name": "World English Bible (American Edition)",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4220649,
+  "code": "WEB"
+ },
+ {
+  "abbr": "en_webbe",
+  "name": "World English Bible (British Edition)",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4238351,
+  "code": "WEBBE"
+ },
+ {
+  "abbr": "en_webu",
+  "name": "World English Bible Updated",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4123050,
+  "code": "WEBU"
+ },
+ {
+  "abbr": "en_webus",
+  "name": "World English Bible, American English Edition, without Strong's numbers",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4110288,
+  "code": "WEBUS"
+ },
+ {
+  "abbr": "en_wmb",
+  "name": "World Messianic Bible (American English)",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4234205,
+  "code": "WMB"
+ },
+ {
+  "abbr": "en_wmbbe",
+  "name": "World Messianic Bible (British Edition)",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4239129,
+  "code": "WMBBE"
+ },
+ {
+  "abbr": "en_wbms",
+  "name": "Wycliffe's Bible with Modern Spelling",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4377129,
+  "code": "WBMS"
+ },
+ {
+  "abbr": "en_ylt98",
+  "name": "Young's Literal Translation 1898",
+  "language": "en",
+  "language_name": "English",
+  "direction": "ltr",
+  "fts": "en",
+  "size": 4295476,
+  "code": "YLT98"
+ },
+ {
+  "abbr": "ak_wakna",
+  "name": "Akuapem Twi Contemporary Bible",
+  "language": "ak",
+  "language_name": "Akan",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 3824891,
+  "code": "WAKNA"
+ },
+ {
+  "abbr": "sq_albb",
+  "name": "Bibla Shqip 1994",
+  "language": "sq",
+  "language_name": "Albanian",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4464042,
+  "code": "ALBB"
+ },
+ {
+  "abbr": "ar_kehm",
+  "name": "Ketab El Hayat Majani",
+  "language": "ar",
+  "language_name": "Arabic",
+  "direction": "rtl",
+  "fts": "intl",
+  "size": 8083432,
+  "code": "KEHM"
+ },
+ {
+  "abbr": "as_irvasm",
+  "name": "Indian Revised Version (IRV) Assamese 2019",
+  "language": "as",
+  "language_name": "Assamese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 10515996,
+  "code": "IRVASM"
+ },
+ {
+  "abbr": "be_bbl",
+  "name": "Bíblia (tradução de V. Semukha)",
+  "language": "be",
+  "language_name": "Belarusian",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 6122741,
+  "code": "BBL"
+ },
+ {
+  "abbr": "bn_irvben",
+  "name": "Indian Revised Version (IRV) Bengali",
+  "language": "bn",
+  "language_name": "Bengali",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 9949406,
+  "code": "IRVBEN"
+ },
+ {
+  "abbr": "bg_vbg",
+  "name": "Veren",
+  "language": "bg",
+  "language_name": "Bulgarian",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 6460442,
+  "code": "VBG"
+ },
+ {
+  "abbr": "my_jbmle",
+  "name": "Judson Bible",
+  "language": "my",
+  "language_name": "Burmese",
+  "direction": "ltr",
+  "fts": "cjk",
+  "size": 14607960,
+  "code": "JBMLE"
+ },
+ {
+  "abbr": "ca_bci",
+  "name": "Bíblia Catalana Interconfessional",
+  "language": "ca",
+  "language_name": "Catalan",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4103169,
+  "code": "BCI"
+ },
+ {
+  "abbr": "ckb_okss",
+  "name": "Kurdi Sorani Standard Version",
+  "language": "ckb",
+  "language_name": "Central Kurdish",
+  "direction": "rtl",
+  "fts": "intl",
+  "size": 6416164,
+  "code": "OKSS"
+ },
+ {
+  "abbr": "zh_cunpss-shen",
+  "name": "Chinese Union Version (New Punctuation, Shen Edition)",
+  "language": "zh",
+  "language_name": "Chinese",
+  "direction": "ltr",
+  "fts": "cjk",
+  "size": 3298541,
+  "code": "CUNPSS-SHEN"
+ },
+ {
+  "abbr": "zh_cnvs",
+  "name": "New Chinese Version",
+  "language": "zh",
+  "language_name": "Chinese",
+  "direction": "ltr",
+  "fts": "cjk",
+  "size": 3573911,
+  "code": "CNVS"
+ },
+ {
+  "abbr": "cs_bkr",
+  "name": "Bible Kralická 1613",
+  "language": "cs",
+  "language_name": "Czech",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 3989932,
+  "code": "BKR"
+ },
+ {
+  "abbr": "eo_esp",
+  "name": "Esperanto (La Sankta Biblio 1926)",
+  "language": "eo",
+  "language_name": "Esperanto",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 3948391,
+  "code": "ESP"
+ },
+ {
+  "abbr": "ee_oal",
+  "name": "Ewe Contemporary Scriptures",
+  "language": "ee",
+  "language_name": "Ewe",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4210626,
+  "code": "OAL"
+ },
+ {
+  "abbr": "tl_abtag",
+  "name": "Ang Biblia 1905",
+  "language": "tl",
+  "language_name": "Filipino",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 5014009,
+  "code": "ABTAG"
+ },
+ {
+  "abbr": "fi_fb38",
+  "name": "Kirkkoraamattu 1933/38",
+  "language": "fi",
+  "language_name": "Finnish",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4337638,
+  "code": "FB38"
+ },
+ {
+  "abbr": "fr_apee",
+  "name": "Le Bible de I'Épée",
+  "language": "fr",
+  "language_name": "French",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4390832,
+  "code": "APEE"
+ },
+ {
+  "abbr": "de_sch1951",
+  "name": "Schlachter 1951",
+  "language": "de",
+  "language_name": "German",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4345862,
+  "code": "SCH1951"
+ },
+ {
+  "abbr": "el_fpb",
+  "name": "Modern Greek (Demotic)",
+  "language": "el",
+  "language_name": "Greek",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 7482417,
+  "code": "FPB"
+ },
+ {
+  "abbr": "gu_irvguj",
+  "name": "Indian Revised Version (IRV) Gujarati 2019",
+  "language": "gu",
+  "language_name": "Gujarati",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 9682539,
+  "code": "IRVGUJ"
+ },
+ {
+  "abbr": "ht_bsa",
+  "name": "Bib Sen An: Kreyòl Ayisyen",
+  "language": "ht",
+  "language_name": "Haitian Creole",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 3989271,
+  "code": "BSA"
+ },
+ {
+  "abbr": "ha_bsrk",
+  "name": "Hausa Contemporary Bible",
+  "language": "ha",
+  "language_name": "Hausa",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4024361,
+  "code": "BSRK"
+ },
+ {
+  "abbr": "hi_irvhin",
+  "name": "Indian Revised Version (IRV) Hindi 2019",
+  "language": "hi",
+  "language_name": "Hindi",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 10418952,
+  "code": "IRVHIN"
+ },
+ {
+  "abbr": "hu_hunk",
+  "name": "Károli 1908",
+  "language": "hu",
+  "language_name": "Hungarian",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4282563,
+  "code": "HUNK"
+ },
+ {
+  "abbr": "ig_biuo",
+  "name": "Igbo Contemporary Bible",
+  "language": "ig",
+  "language_name": "Igbo",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 5134934,
+  "code": "BIUO"
+ },
+ {
+  "abbr": "it_irb20",
+  "name": "Sacra Bibbia Versione Riveduta 2020",
+  "language": "it",
+  "language_name": "Italian",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4241910,
+  "code": "IRB20"
+ },
+ {
+  "abbr": "ja_jniv",
+  "name": "聖書 新共同訳 (Shinkyodoyaku)",
+  "language": "ja",
+  "language_name": "Japanese",
+  "direction": "ltr",
+  "fts": "cjk",
+  "size": 5099122,
+  "code": "JNIV"
+ },
+ {
+  "abbr": "kn_irvkan",
+  "name": "Indian Revised Version (IRV) Kannada 2019",
+  "language": "kn",
+  "language_name": "Kannada",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 10525117,
+  "code": "IRVKAN"
+ },
+ {
+  "abbr": "kk_qazbi",
+  "name": "Киелі кітап",
+  "language": "kk",
+  "language_name": "Kazakh",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 7884292,
+  "code": "QAZBI"
+ },
+ {
+  "abbr": "ki_kgnk",
+  "name": "Kiugo Gĩtheru Kĩa Ngai Kĩhingũre",
+  "language": "ki",
+  "language_name": "Kikuyu",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 5009753,
+  "code": "KGNK"
+ },
+ {
+  "abbr": "rn_obkc",
+  "name": "Kirundi Contemporary Bible",
+  "language": "rn",
+  "language_name": "Kirundi",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4151193,
+  "code": "OBKC"
+ },
+ {
+  "abbr": "ko_krv",
+  "name": "Korean Revised",
+  "language": "ko",
+  "language_name": "Korean",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4526878,
+  "code": "KRV"
+ },
+ {
+  "abbr": "la_vulg",
+  "name": "Vulgata Latina",
+  "language": "la",
+  "language_name": "Latin",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 3671978,
+  "code": "VULG"
+ },
+ {
+  "abbr": "lv_lg8",
+  "name": "Glika Bībele",
+  "language": "lv",
+  "language_name": "Latvian",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4032364,
+  "code": "LG8"
+ },
+ {
+  "abbr": "ln_smnb",
+  "name": "Lingala Contemporary Bible",
+  "language": "ln",
+  "language_name": "Lingala",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4690855,
+  "code": "SMNB"
+ },
+ {
+  "abbr": "lg_olcb",
+  "name": "Bayibuli Entukuvu",
+  "language": "lg",
+  "language_name": "Luganda",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4341544,
+  "code": "OLCB"
+ },
+ {
+  "abbr": "ms_tmvr",
+  "name": "Alkitab Berita Baik",
+  "language": "ms",
+  "language_name": "Malay",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4528673,
+  "code": "TMVR"
+ },
+ {
+  "abbr": "ml_irvmal",
+  "name": "Indian Revised Version (IRV) Malayalam",
+  "language": "ml",
+  "language_name": "Malayalam",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 11297851,
+  "code": "IRVMAL"
+ },
+ {
+  "abbr": "mi_mri2012",
+  "name": "Paipera Tapu 2012",
+  "language": "mi",
+  "language_name": "Maori",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4857154,
+  "code": "MRI2012"
+ },
+ {
+  "abbr": "mr_irvmar",
+  "name": "Indian Revised Version (IRV) Marathi",
+  "language": "mr",
+  "language_name": "Marathi",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 10491511,
+  "code": "IRVMAR"
+ },
+ {
+  "abbr": "ne_oncv",
+  "name": "Open Nepali Contemporary Version",
+  "language": "ne",
+  "language_name": "Nepali",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 10642495,
+  "code": "ONCV"
+ },
+ {
+  "abbr": "nd_oben",
+  "name": "Ndebele Contemporary Bible",
+  "language": "nd",
+  "language_name": "Northern Ndebele",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4070451,
+  "code": "OBEN"
+ },
+ {
+  "abbr": "nb_bibel2011",
+  "name": "Bibel 2011",
+  "language": "nb",
+  "language_name": "Norwegian (Bokmål)",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 3754140,
+  "code": "BIBEL2011"
+ },
+ {
+  "abbr": "ny_tccl",
+  "name": "Chichewa Contemporary Version",
+  "language": "ny",
+  "language_name": "Nyanja",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4300422,
+  "code": "TCCL"
+ },
+ {
+  "abbr": "or_irvory",
+  "name": "Indian Revised Version (IRV) Odia",
+  "language": "or",
+  "language_name": "Odia",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 10793530,
+  "code": "IRVORY"
+ },
+ {
+  "abbr": "om_onocv",
+  "name": "New Oromo Contemporary Version",
+  "language": "om",
+  "language_name": "Oromo",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 5758046,
+  "code": "ONOCV"
+ },
+ {
+  "abbr": "fa_opcb",
+  "name": "Persian Contemporary Bible 2022",
+  "language": "fa",
+  "language_name": "Persian",
+  "direction": "rtl",
+  "fts": "intl",
+  "size": 5981265,
+  "code": "OPCB"
+ },
+ {
+  "abbr": "pl_ubg",
+  "name": "Uwspółcześniona Biblia Gdańska",
+  "language": "pl",
+  "language_name": "Polish",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 3993779,
+  "code": "UBG"
+ },
+ {
+  "abbr": "pt_acf",
+  "name": "Almeida Corrigida e Revisada Fiel",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4031867,
+  "code": "ACF"
+ },
+ {
+  "abbr": "pt_aa",
+  "name": "Almeida Revisada Imprensa Bíblica",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4023851,
+  "code": "AA"
+ },
+ {
+  "abbr": "pt_ara",
+  "name": "Almeida Revista e Atualizada",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 3991617,
+  "code": "ARA"
+ },
+ {
+  "abbr": "pt_arc",
+  "name": "Almeida Revista e Corrigida",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4029725,
+  "code": "ARC"
+ },
+ {
+  "abbr": "pt_rc69",
+  "name": "Almeida Revista e Corrigida 1969",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4019951,
+  "code": "RC69"
+ },
+ {
+  "abbr": "pt_a21",
+  "name": "Almeida Século 21",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 3946354,
+  "code": "A21"
+ },
+ {
+  "abbr": "pt_avm",
+  "name": "Bíblia Sagrada Ave-Maria",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 3976208,
+  "code": "AVM"
+ },
+ {
+  "abbr": "pt_vfl",
+  "name": "Bíblia Sagrada: Versão Fácil de Ler",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4300593,
+  "code": "VFL"
+ },
+ {
+  "abbr": "pt_bpt09",
+  "name": "Bíblia para Todos",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4143197,
+  "code": "BPT09"
+ },
+ {
+  "abbr": "pt_pastoral",
+  "name": "Edição Pastoral",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 3990295,
+  "code": "PASTORAL"
+ },
+ {
+  "abbr": "pt_kja",
+  "name": "King James Atualizada",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4640301,
+  "code": "KJA"
+ },
+ {
+  "abbr": "pt_bkj",
+  "name": "King James Fiel",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4183828,
+  "code": "BKJ"
+ },
+ {
+  "abbr": "pt_naa",
+  "name": "Nova Almeida Atualizada",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4171661,
+  "code": "NAA"
+ },
+ {
+  "abbr": "pt_nbv",
+  "name": "Nova Bíblia Viva 2007",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4524132,
+  "code": "NBV"
+ },
+ {
+  "abbr": "pt_ntlh",
+  "name": "Nova Tradução na Linguagem de Hoje",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4260953,
+  "code": "NTLH"
+ },
+ {
+  "abbr": "pt_nvi",
+  "name": "Nova Versão Internacional",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4075851,
+  "code": "NVI"
+ },
+ {
+  "abbr": "pt_nvi2011",
+  "name": "Nova Versão Internacional 2011",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4031704,
+  "code": "NVI2011"
+ },
+ {
+  "abbr": "pt_nvt",
+  "name": "Nova Versão Transformadora",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4108708,
+  "code": "NVT"
+ },
+ {
+  "abbr": "pt_ol",
+  "name": "O Livro",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4141342,
+  "code": "OL"
+ },
+ {
+  "abbr": "pt_tb",
+  "name": "Tradução Brasileira",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 3983881,
+  "code": "TB"
+ },
+ {
+  "abbr": "pt_matos",
+  "name": "Tradução do Pe. Matos Soares",
+  "language": "pt",
+  "language_name": "Portuguese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4065936,
+  "code": "MATOS"
+ },
+ {
+  "abbr": "pa_irvpun",
+  "name": "Indian Revised Version (IRV) Punjabi",
+  "language": "pa",
+  "language_name": "Punjabi",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 9861250,
+  "code": "IRVPUN"
+ },
+ {
+  "abbr": "ro_vdc",
+  "name": "Versiunea Dumitru Cornilescu",
+  "language": "ro",
+  "language_name": "Romanian",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4328741,
+  "code": "VDC"
+ },
+ {
+  "abbr": "ru_synod",
+  "name": "Синодальный перевод (incomplete: missing Esther and Daniel)",
+  "language": "ru",
+  "language_name": "Russian",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 6052673,
+  "code": "SYNOD"
+ },
+ {
+  "abbr": "gd_abg1992",
+  "name": "Am Bìoball Gàidhlig 1992",
+  "language": "gd",
+  "language_name": "Scottish Gaelic",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4710949,
+  "code": "ABG1992"
+ },
+ {
+  "abbr": "sr_dk",
+  "name": "Daničić-Karadžić",
+  "language": "sr",
+  "language_name": "Serbian",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 5723045,
+  "code": "DK"
+ },
+ {
+  "abbr": "sn_bdrsc",
+  "name": "Shona Contemporary Bible 2017",
+  "language": "sn",
+  "language_name": "Shona",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4043089,
+  "code": "BDRSC"
+ },
+ {
+  "abbr": "es_rvr1960",
+  "name": "Reina Valera 1960",
+  "language": "es",
+  "language_name": "Spanish",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4023357,
+  "code": "RVR1960"
+ },
+ {
+  "abbr": "sw_sruv",
+  "name": "Swahili Revised Union Version",
+  "language": "sw",
+  "language_name": "Swahili",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 3931554,
+  "code": "SRUV"
+ },
+ {
+  "abbr": "sv_sfb15",
+  "name": "Svenska Folkbibeln 2015",
+  "language": "sv",
+  "language_name": "Swedish",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 3932311,
+  "code": "SFB15"
+ },
+ {
+  "abbr": "ta_irvtam",
+  "name": "Indian Revised Version (IRV) Tamil",
+  "language": "ta",
+  "language_name": "Tamil",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 12594959,
+  "code": "IRVTAM"
+ },
+ {
+  "abbr": "te_irvtel",
+  "name": "Indian Revised Version (IRV) Telugu 2019",
+  "language": "te",
+  "language_name": "Telugu",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 10225052,
+  "code": "IRVTEL"
+ },
+ {
+  "abbr": "th_kjvthai",
+  "name": "Thai KJV",
+  "language": "th",
+  "language_name": "Thai",
+  "direction": "ltr",
+  "fts": "cjk",
+  "size": 11663239,
+  "code": "KJVTHAI"
+ },
+ {
+  "abbr": "to_rwv",
+  "name": "Ko e Tohi Tapu Kātoa",
+  "language": "to",
+  "language_name": "Tongan",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 5356830,
+  "code": "RWV"
+ },
+ {
+  "abbr": "tr_ytc",
+  "name": "Yorumsuz Türkçe Çeviri",
+  "language": "tr",
+  "language_name": "Turkish",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 4042431,
+  "code": "YTC"
+ },
+ {
+  "abbr": "ur_irvurd",
+  "name": "Indian Revised Version (IRV) Urdu 2019",
+  "language": "ur",
+  "language_name": "Urdu",
+  "direction": "rtl",
+  "fts": "intl",
+  "size": 9613213,
+  "code": "IRVURD"
+ },
+ {
+  "abbr": "vi_vie",
+  "name": "Tiếng Việt",
+  "language": "vi",
+  "language_name": "Vietnamese",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 5218376,
+  "code": "VIE"
+ },
+ {
+  "abbr": "yo_oycb",
+  "name": "Yoruba Contemporary Bible",
+  "language": "yo",
+  "language_name": "Yoruba",
+  "direction": "ltr",
+  "fts": "intl",
+  "size": 5410703,
+  "code": "OYCB"
+ }
+]

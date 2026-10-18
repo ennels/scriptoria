@@ -1,12 +1,15 @@
 [project]
 name = "scriptoria"
-version = "0.1.0"
+version = "0.2.0"
 description = "A local, offline Bible study app — parallel translations, search, cross-references, Strong's, and Greek/Hebrew analysis"
 requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.115",
     "uvicorn[standard]>=0.30",
 ]
+
+[dependency-groups]
+dev = ["pytest>=8", "httpx>=0.27"]
 
 [project.scripts]
 scriptoria = "scriptoria.server:run"
@@ -17,3 +20,7 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["scriptoria"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["tests"]
