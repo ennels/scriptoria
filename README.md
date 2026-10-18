@@ -1,31 +1,36 @@
 # Scriptoria
 
-A local, offline Bible study app — parallel translations, full-text search,
-cross-references, Strong's numbers, and Greek/Hebrew word analysis. Runs in your
-browser off a local SQLite database. No internet needed once built.
+An offline interlinear study Bible for Linux (and anything else with Python). It runs
+locally in your browser off a SQLite database — no account, no internet once installed.
 
-## Status
-
-- [x] Data layer: canonical 66-book verse spine; importers for translations,
-      cross-references (OpenBible, ~345k links), and the Strong's lexicon
-      (OpenScriptures, ~14k entries). Full-text search via SQLite FTS5.
-- [x] Greek/Hebrew originals (STEPBible TAHOT/TAGNT) — interlinear word data with
-      Strong's, morphology, transliteration and gloss (~425k tagged words).
-- [x] FastAPI backend — chapters, parallel translations, cross-references,
-      interlinear, Strong's lexicon, full-text search, notes & highlights.
-- [x] Browser UI — illuminated reader with flowing or parallel columns, click-a-verse
-      study panel (cross-refs, Greek/Hebrew interlinear with Strong's pop-ups, notes),
-      full-text search, light/dark. Offline: fonts are bundled, no CDN.
-- [ ] Versification map (see Known limitations)
-
-## Known limitations
-
-- **OT versification:** the Hebrew originals (STEPBible) use Masoretic verse
-  numbering; the English translations use English numbering. These match for
-  ~94% of OT verses but differ in Psalms (title counted as v1), Malachi 3/4,
-  Joel, and scattered other passages — so the interlinear can be off by a verse
-  there. A KJV↔Hebrew versification map (planned) will align them. The NT
-  aligns fully.
+- **Read** any installed translation as flowing text or verse-by-verse, or several side by
+  side in aligned columns — including the **Hebrew and Greek** themselves (with the
+  Nestle-Aland or the KJV's Textus Receptus New Testament).
+- **Side-by-side panes**: two independent passages at once (Isaiah 53 beside Acts 8), or
+  link the panes to follow the same chapter and scroll together.
+- **Interlinear**: switch any pane to word-by-word Hebrew/Greek with transliteration,
+  English gloss, Strong's number and parsing. Psalm titles appear as headings.
+- **Every verse aligned**: all 31,102 KJV verses carry their original words. Where Hebrew
+  or other editions number a verse differently (Malachi 4 = Hebrew 3:19–24, Joel 2:28 =
+  Hebrew 3:1…), the study panel says so instead of guessing.
+- **Plain-English parsing** (“Verb · Qal (Simple, Active) Perfect · Third Singular
+  Masculine”) and **manuscript notes**: Qere/Ketiv readings, words found only in the
+  Textus Receptus or only in Nestle-Aland (e.g. 1 John 5:7).
+- **Word study**: Tyndale House lexicon entry (Abbott-Smith / BDB-based), every sense,
+  how often and where it occurs (chart by book), every inflected form, how it's glossed,
+  and a concordance of every verse.
+- **Search**: all words / exact phrase / any word / advanced syntax, across any set of
+  translations, limited to a testament, book or range of books, with hits per book. Search
+  the Hebrew and Greek by Strong's number (`G26`), dictionary word (`ἀγάπη` = every form),
+  exact form (`ἀγάπην`) or transliteration (`agape`, `reshit`) — accents and vowel points
+  optional. Type a reference (`jn 3:16`, `1 cor 13`, `Ps 23:1-4`) to jump straight there.
+- **Translation library**: 122 versions in 67 languages; install or remove by language
+  (right-to-left scripts handled).
+- **Profiles** for everyone in the house (no passwords): each has their own highlights,
+  tagged notes (several per verse), reading place and settings. Browse, search and export
+  notes as Markdown or JSON.
+- Cross-references (OpenBible.info, ~345,000 links ranked by votes), light and dark themes,
+  adjustable text size, keyboard shortcuts.
 
 ## Install on a new machine
 
@@ -38,44 +43,107 @@ cd ~/Projects/scriptoria
 unzip ~/Downloads/scriptoria-db.zip      # prebuilt database -> scriptoria.db
 uv sync
 bash scripts/install-launcher.sh         # app-menu entry (optional)
+uv run scriptoria                        # opens http://127.0.0.1:8701
+```
+
+No prebuilt database? Build one (below).
+
+## Updating from the first version
+
+The first release kept notes inside `scriptoria.db`. This version keeps them in a separate
+user database and moves old notes across automatically the first time it starts — so start
+it once **before** replacing the database:
+
+```bash
+cd ~/Projects/scriptoria && git pull && uv sync
+uv run scriptoria          # moves any old notes, then shows "database is from an older version"
+# Ctrl+C, then:
+unzip -o ~/Downloads/scriptoria-db.zip
 uv run scriptoria
 ```
 
-No prebuilt database? Build one instead (below).
+## Where your things are kept
+
+| What | Where |
+|---|---|
+| Scripture, lexicons, originals (rebuildable) | `scriptoria.db` in the project folder |
+| Profiles, notes, highlights, settings | Linux `~/.local/share/scriptoria/user.db` · macOS `~/Library/Application Support/scriptoria/user.db` |
+
+Back up `user.db` to keep your notes. Paths can be overridden with `SCRIPTORIA_DB` and
+`SCRIPTORIA_USER_DB`.
+
+## Using it
+
+| Key | Does |
+|---|---|
+| `/` | search, or type a reference to go there |
+| `[` `]` | previous / next chapter (in the active pane) |
+| `I` | interlinear on/off |
+| `S` | side-by-side panes |
+| `P` | study panel |
+| `Esc` | back to reading |
+
+Click a verse for its cross-references, interlinear, word study and notes. Click any
+Hebrew/Greek word for a word study. **Aa** sets text size, layout, which interlinear lines
+show, Hebrew cantillation marks, cross-reference margin marks and theme.
+
+Advanced search uses SQLite FTS5 syntax: `faith AND works`, `grace NOT law`,
+`"the word of the lord"`, `NEAR(faith works, 5)`, `believ*`.
+
+## Translations
+
+Install more from **Library** in the app. Installs come from a local copy of the
+[thiagobodruk/bible](https://github.com/thiagobodruk/bible) zip if one is found (set
+`SCRIPTORIA_BIBLES`, or put `bible.zip` in `data/` or `~/Downloads/`), otherwise each
+translation downloads once (~4 MB). Some versions in that collection are copyrighted
+(NIV, ESV, NASB…); they're for your own study — don't redistribute them.
 
 ## Build the database
 
 ```bash
-uv sync
-uv run python -m scriptoria.build
-# add your own translations:
-uv run python -m scriptoria.build --translations path/to/your.json --code WEB --name "World English Bible"
+uv run python -m scriptoria.build --bibles ~/Downloads/bible.zip               # KJV + 9 English versions
+uv run python -m scriptoria.build --bibles ~/Downloads/bible.zip --versions en  # every English version
+uv run python -m scriptoria.build --versions BSB,RVR1960,LSG                     # downloads what's needed
 ```
 
-The build downloads public-domain / CC-BY sources into `data/` (cached). The
-built `scriptoria.db` and `data/` are gitignored.
+Sources are downloaded once into `data/`. A full build takes about 30 seconds. Rebuilding
+never touches notes.
 
-## Run it
+## Development
 
 ```bash
-uv run scriptoria          # serves 127.0.0.1:8701 and opens your browser
+uv sync --group dev
+uv run pytest            # 45 tests: parsing, sanitizing, migrations, API end to end
 ```
 
-Everything runs locally against `scriptoria.db` — no network needed once built.
-
-### Desktop launcher (Linux)
-
-`scripts/install-launcher.sh` drops a "Scriptoria" entry into your app menu that
-starts the server and opens the reader:
-
-```bash
-bash scripts/install-launcher.sh
+```
+scriptoria/
+  api/            FastAPI routers: reading, study (interlinear, word study), search, library, user
+  importers/      STEPBible originals, lexicons, morphology, translations, cross-refs, Strong's
+  build.py        downloads sources and builds scriptoria.db
+  userdb.py       profiles/notes database + migrations
+  references.py   "jn 3:16" -> John.3.16
+  web/            index.html, styles.css, js/ (ES modules, no build step), bundled fonts
+scripts/          launcher installer, catalog generator
+tests/
 ```
 
 ## Data sources & licenses
 
-- **Translations:** your own JSON (any of several common shapes), plus a
-  public-domain KJV seed (scrollmapper).
-- **Cross-references:** [OpenBible.info](https://www.openbible.info/labs/cross-references/) (CC BY).
-- **Strong's lexicon:** [OpenScriptures](https://github.com/openscriptures/strongs) (public domain).
-- **Greek/Hebrew originals:** [STEPBible](https://github.com/STEPBible/STEPBible-Data) TAHOT/TAGNT (CC BY 4.0).
+- Hebrew & Greek tagged text, Tyndale brief lexicons, morphology expansions:
+  [STEPBible.org](https://github.com/STEPBible/STEPBible-Data) — TAHOT, TAGNT, TBESH, TBESG,
+  TEHMC, TEGMC (CC BY 4.0, Tyndale House Cambridge). Data is downloaded from STEPBible at
+  build time, as they request, not redistributed here.
+- Strong's dictionary: [OpenScriptures](https://github.com/openscriptures/strongs) (public domain).
+- Cross-references: [OpenBible.info](https://www.openbible.info/labs/cross-references/) (CC BY).
+- KJV: [scrollmapper/bible_databases](https://github.com/scrollmapper/bible_databases) (public domain).
+- Translation library: [thiagobodruk/bible](https://github.com/thiagobodruk/bible) (MIT code; each text has its own terms).
+- Fonts (bundled, SIL Open Font License): Spectral, Public Sans, Gentium Book Plus, Noto Serif Hebrew.
+
+## Known limitations
+
+- Verse numbering follows the KJV. Translations that number a few verses differently
+  (e.g. 3 John 1:15 in modern versions) show those verses, with a note that the Hebrew/Greek
+  words sit under the neighbouring KJV verse.
+- Lexicon definitions are brief-lexicon entries (Abbott-Smith for Greek, BDB-based for
+  Hebrew), not full BDAG/HALOT.

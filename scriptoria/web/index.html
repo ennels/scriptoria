@@ -4,45 +4,37 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Scriptoria</title>
+<meta name="description" content="Offline Bible study: parallel translations, Hebrew and Greek interlinear, word studies, cross-references and notes.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2327408B'/><text x='16' y='23' font-family='Georgia,serif' font-size='21' font-weight='700' fill='%23C9A227' text-anchor='middle'>S</text></svg>">
 <link rel="stylesheet" href="/assets/styles.css">
+<script>
+  // Apply the saved theme before first paint so dark mode doesn't flash.
+  try { const t = localStorage.getItem('scr.theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
 </head>
 <body>
   <header class="topbar">
     <span class="brand">Script<b>o</b>ria</span>
-    <div class="nav">
-      <select id="book" aria-label="Book"></select>
-      <select id="chapter" aria-label="Chapter"></select>
-    </div>
-    <form class="search" id="searchForm" role="search">
-      <input id="searchInput" type="search" placeholder="Search the text…" aria-label="Search scripture">
+    <form class="omnibox" id="omnibox" role="search" autocomplete="off">
+      <input id="omni" class="field" type="search" placeholder="Search, or go to a passage — jn 3:16 · love · ἀγάπη · G26" aria-label="Search or go to a passage">
     </form>
-    <button class="iconbtn" id="themeBtn" title="Toggle light/dark" aria-label="Toggle theme">◐</button>
+    <nav class="tools" aria-label="Tools">
+      <button class="iconbtn" id="btnSplit" aria-pressed="false" title="Side-by-side reading (S)" aria-label="Side-by-side reading"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2"/><path d="M10 3.5v13"/></svg></button>
+      <button class="btn quiet" id="btnLibrary" title="Translation library">Library</button>
+      <button class="btn quiet" id="btnNotes" title="All my notes">Notes</button>
+      <button class="iconbtn" id="btnDisplay" title="Reading options" aria-label="Reading options">Aa</button>
+      <button class="iconbtn" id="btnStudy" aria-pressed="true" title="Study panel (P)" aria-label="Study panel"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2"/><path d="M12.5 3.5v13M14.5 7h1M14.5 9.5h1"/></svg></button>
+      <button class="who" id="btnWho" title="Who's reading"><span class="avatar" id="whoAvatar">R</span><span id="whoName">Reader</span></button>
+    </nav>
   </header>
 
-  <div class="shelf">
-    <span class="shelf-label">Read in</span>
-    <div class="versions" id="versions" aria-label="Translations"></div>
+  <div class="app" id="app">
+    <main class="workspace" id="workspace" aria-label="Reading"></main>
+    <section class="view" id="view" hidden></section>
+    <aside class="study" id="study" aria-label="Study panel"></aside>
   </div>
 
-  <div class="main">
-    <main class="reader" id="reader" tabindex="-1"></main>
-    <aside class="study" id="study" aria-label="Study panel">
-      <div class="study-empty" id="studyEmpty">
-        Select a verse to see its cross-references, Greek or Hebrew words, and your notes.
-      </div>
-      <div id="studyBody" hidden>
-        <div class="study-head"><div class="study-ref" id="studyRef"></div></div>
-        <div class="tabs" role="tablist">
-          <button class="tab" role="tab" data-tab="xref" aria-selected="true">Cross-references</button>
-          <button class="tab" role="tab" data-tab="inter" aria-selected="false">Interlinear</button>
-          <button class="tab" role="tab" data-tab="notes" aria-selected="false">Notes</button>
-        </div>
-        <div class="tabpanel" id="tabpanel"></div>
-      </div>
-    </aside>
-  </div>
-
-<script src="/assets/app.js"></script>
+  <div class="sr" aria-live="polite" id="live"></div>
+  <script type="module" src="/assets/js/main.js"></script>
 </body>
 </html>

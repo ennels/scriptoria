@@ -90,6 +90,12 @@ def test_search_modes(client, params, expect):
     assert d["total"] >= expect and d["results"] and d["by_book"]
 
 
+def test_resolve(client):
+    r = client.get("/api/resolve", params={"q": "1 cor 13:4-7"}).json()
+    assert r["found"] and r["osis"] == "1Cor.13.4" and r["verse_end"] == 7
+    assert client.get("/api/resolve", params={"q": "love one another"}).json() == {"found": False, "query": "love one another"}
+
+
 def test_search_reference_and_errors(client):
     assert client.get("/api/search", params={"q": "jn 3:16"}).json()["reference"]["osis"] == "John.3.16"
     assert client.get("/api/search", params={"q": "faith AND (", "mode": "advanced"}).status_code == 400

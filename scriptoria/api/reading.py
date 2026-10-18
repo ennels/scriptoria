@@ -58,8 +58,8 @@ def translations(con: sqlite3.Connection = Depends(content)):
 def resolve(q: str):
     ref = parse_reference(q)
     if not ref:
-        raise HTTPException(404, f"Not a reference: {q}")
-    return {"book": ref.book, "chapter": ref.chapter, "verse": ref.verse,
+        return {"found": False, "query": q}
+    return {"found": True, "book": ref.book, "chapter": ref.chapter, "verse": ref.verse,
             "verse_end": ref.verse_end, "osis": ref.osis, "label": ref.label()}
 
 
