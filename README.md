@@ -27,6 +27,19 @@ browser off a local SQLite database. No internet needed once built.
   there. A KJV↔Hebrew versification map (planned) will align them. The NT
   aligns fully.
 
+## Install on a new machine
+
+```bash
+git clone https://github.com/ennels/scriptoria.git ~/Projects/scriptoria
+cd ~/Projects/scriptoria
+unzip ~/Downloads/scriptoria-db.zip      # prebuilt database -> scriptoria.db
+uv sync
+bash scripts/install-launcher.sh         # app-menu entry (optional)
+uv run scriptoria
+```
+
+No prebuilt database? Build one instead (below).
+
 ## Build the database
 
 ```bash
