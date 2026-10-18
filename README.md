@@ -11,8 +11,11 @@ browser off a local SQLite database. No internet needed once built.
       (OpenScriptures, ~14k entries). Full-text search via SQLite FTS5.
 - [x] Greek/Hebrew originals (STEPBible TAHOT/TAGNT) — interlinear word data with
       Strong's, morphology, transliteration and gloss (~425k tagged words).
-- [ ] FastAPI backend
-- [ ] Browser UI (reader, parallel view, search, cross-refs, interlinear, notes)
+- [x] FastAPI backend — chapters, parallel translations, cross-references,
+      interlinear, Strong's lexicon, full-text search, notes & highlights.
+- [x] Browser UI — illuminated reader with flowing or parallel columns, click-a-verse
+      study panel (cross-refs, Greek/Hebrew interlinear with Strong's pop-ups, notes),
+      full-text search, light/dark. Offline: fonts are bundled, no CDN.
 - [ ] Versification map (see Known limitations)
 
 ## Known limitations
@@ -35,6 +38,23 @@ uv run python -m scriptoria.build --translations path/to/your.json --code WEB --
 
 The build downloads public-domain / CC-BY sources into `data/` (cached). The
 built `scriptoria.db` and `data/` are gitignored.
+
+## Run it
+
+```bash
+uv run scriptoria          # serves 127.0.0.1:8701 and opens your browser
+```
+
+Everything runs locally against `scriptoria.db` — no network needed once built.
+
+### Desktop launcher (Linux)
+
+`scripts/install-launcher.sh` drops a "Scriptoria" entry into your app menu that
+starts the server and opens the reader:
+
+```bash
+bash scripts/install-launcher.sh
+```
 
 ## Data sources & licenses
 

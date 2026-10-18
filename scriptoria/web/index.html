@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scriptoria</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2327408B'/><text x='16' y='23' font-family='Georgia,serif' font-size='21' font-weight='700' fill='%23C9A227' text-anchor='middle'>S</text></svg>">
+<link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <span class="brand">Script<b>o</b>ria</span>
+    <div class="nav">
+      <select id="book" aria-label="Book"></select>
+      <select id="chapter" aria-label="Chapter"></select>
+    </div>
+    <form class="search" id="searchForm" role="search">
+      <input id="searchInput" type="search" placeholder="Search the text…" aria-label="Search scripture">
+    </form>
+    <button class="iconbtn" id="themeBtn" title="Toggle light/dark" aria-label="Toggle theme">◐</button>
+  </header>
+
+  <div class="shelf">
+    <span class="shelf-label">Read in</span>
+    <div class="versions" id="versions" aria-label="Translations"></div>
+  </div>
+
+  <div class="main">
+    <main class="reader" id="reader" tabindex="-1"></main>
+    <aside class="study" id="study" aria-label="Study panel">
+      <div class="study-empty" id="studyEmpty">
+        Select a verse to see its cross-references, Greek or Hebrew words, and your notes.
+      </div>
+      <div id="studyBody" hidden>
+        <div class="study-head"><div class="study-ref" id="studyRef"></div></div>
+        <div class="tabs" role="tablist">
+          <button class="tab" role="tab" data-tab="xref" aria-selected="true">Cross-references</button>
+          <button class="tab" role="tab" data-tab="inter" aria-selected="false">Interlinear</button>
+          <button class="tab" role="tab" data-tab="notes" aria-selected="false">Notes</button>
+        </div>
+        <div class="tabpanel" id="tabpanel"></div>
+      </div>
+    </aside>
+  </div>
+
+<script src="/assets/app.js"></script>
+</body>
+</html>
