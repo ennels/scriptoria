@@ -46,13 +46,14 @@ function noteCard(n, { onChange, showRef = false }) {
   return card;
 }
 
-export async function renderNotesTab(box, osis, { onChange }) {
+export async function renderNotesTab(box, osis, { onChange, alive = () => true }) {
   const [book, chapter] = osis.split('.');
-  put(box, el('p', { class: 'muted', text: 'Loading…' }));
+  if (!box.querySelector('.composer')) put(box, el('p', { class: 'muted', text: 'Loading…' }));
   const [ann, list] = await Promise.all([
     api('/api/annotations', { params: { book, chapter } }),
     api('/api/notes', { params: { osis } }),
   ]);
+  if (!alive()) return;                               // the reader moved on to another verse
   let color = ann.highlights[osis] || null;
   const swatches = el('div', { class: 'swatches', attrs: { role: 'group', 'aria-label': 'Highlight colour' } });
   const paint = () => put(swatches, 
@@ -68,7 +69,7 @@ export async function renderNotesTab(box, osis, { onChange }) {
     } catch (e) { toast(e.message, 'error'); }
   }
   paint();
-  const refresh = () => { renderNotesTab(box, osis, { onChange }); onChange(); };
+  const refresh = () => { renderNotesTab(box, osis, { onChange, alive }); onChange(); };
   const cards = list.notes.map((n) => noteCard(n, { onChange: refresh }));
   put(box, 
     el('div', { class: 'setting' }, el('span', { text: `Highlight for ${app.profile?.name || 'you'}` }), swatches),

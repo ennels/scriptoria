@@ -115,6 +115,7 @@ export class Pane {
 
   async load({ scrollTo = null, keepScroll = false } = {}) {
     const s = this.state;
+    const seq = (this.seq = (this.seq || 0) + 1);       // only the latest request may render
     const anchor = keepScroll ? this.topAnchor() : null;
     this.page.classList.add('loading');
     try {
@@ -122,11 +123,13 @@ export class Pane {
         api('/api/chapter', { params: { book: s.book, chapter: s.chapter, translations: s.versions.join(','), words: s.interlinear ? 1 : '' } }),
         api('/api/annotations', { params: { book: s.book, chapter: s.chapter } }),
       ]);
+      if (seq !== this.seq) return;
       this.data = data;
       this.ann = ann;
       const got = data.translations.map((t) => t.code);
       if (got.join() !== s.versions.join()) { s.versions = got; persist('panes'); }
     } catch (e) {
+      if (seq !== this.seq) return;
       this.page.classList.remove('loading');
       toast(`Couldn't open ${bookName(s.book)} ${s.chapter}: ${e.message}`, 'error');
       return;
@@ -142,8 +145,11 @@ export class Pane {
 
   async refreshAnnotations() {
     const s = this.state;
+    const seq = this.seq;
     const anchor = this.topAnchor();
-    this.ann = await api('/api/annotations', { params: { book: s.book, chapter: s.chapter } });
+    const ann = await api('/api/annotations', { params: { book: s.book, chapter: s.chapter } });
+    if (seq !== this.seq || !this.data) return;          // a newer chapter load took over
+    this.ann = ann;
     this.render();
     if (anchor) this.syncTo(anchor.osis, anchor.delta, true);
   }

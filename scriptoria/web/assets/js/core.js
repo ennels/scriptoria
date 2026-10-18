@@ -18,7 +18,7 @@ export async function api(path, { method = 'GET', body, params, raw = false } = 
     const s = q.toString();
     if (s) url += (url.includes('?') ? '&' : '?') + s;
   }
-  const headers = {};
+  const headers = { 'X-Scriptoria': '1' };
   if (profileId != null) headers['X-Profile'] = String(profileId);
   if (body !== undefined) headers['Content-Type'] = 'application/json';
   const r = await fetch(url, { method, headers, body: body !== undefined ? JSON.stringify(body) : undefined });
@@ -29,7 +29,12 @@ export async function api(path, { method = 'GET', body, params, raw = false } = 
       if (typeof j.detail === 'string') msg = j.detail;
       else if (Array.isArray(j.detail)) msg = j.detail.map((d) => d.msg).join('; ');
     } catch (e) {}
-    const err = new Error(msg);
+    if (r.status === 409 && msg.startsWith('PROFILE_GONE')) {
+      // This profile was deleted (e.g. in another tab): start again as whoever is first.
+      try { localStorage.removeItem('scr.profile'); } catch (e) {}
+      location.reload();
+    }
+    const err = new Error(msg.replace(/^PROFILE_GONE:\s*/, ''));
     err.status = r.status;
     throw err;
   }
@@ -130,13 +135,22 @@ export function mergeSettings(saved) {
 }
 
 const dirty = new Set();
-const flush = debounce(async () => {
+let flushTimer = null;
+/** Save changed settings now (also called before switching profile, so they land on the right one). */
+export async function flushSettings() {
+  clearTimeout(flushTimer);
+  flushTimer = null;
+  if (!dirty.size) return;
   const body = {};
   for (const k of dirty) body[k] = app.settings[k];
   dirty.clear();
-  try { await api('/api/settings', { method: 'PUT', body }); } catch (e) { /* offline-safe: retry on next change */ }
-}, 700);
-export function persist(...keys) { keys.forEach((k) => dirty.add(k)); flush(); }
+  try { await api('/api/settings', { method: 'PUT', body }); } catch (e) { /* retried on the next change */ }
+}
+export function persist(...keys) {
+  keys.forEach((k) => dirty.add(k));
+  clearTimeout(flushTimer);
+  flushTimer = setTimeout(flushSettings, 700);
+}
 
 export const bookName = (osis) => app.book[osis]?.name || osis;
 export function refLabel(osis) {

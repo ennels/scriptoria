@@ -27,11 +27,12 @@ async function followRef(raw) {
   } catch (e) { /* unknown ref: ignore */ }
 }
 
-export async function renderWordStudy(box, id, { translation = 'KJV' } = {}) {
+export async function renderWordStudy(box, id, { translation = 'KJV', alive = () => true } = {}) {
   put(box, el('p', { class: 'muted', text: 'Opening word study…' }));
   let d;
   try { d = await api(`/api/word/${encodeURIComponent(id)}`); }
-  catch (e) { put(box, el('p', { class: 'empty', text: `No word study for ${id}: ${e.message}` })); return; }
+  catch (e) { if (alive()) put(box, el('p', { class: 'empty', text: `No word study for ${id}: ${e.message}` })); return; }
+  if (!alive()) return;
 
   const heb = d.language === 'hebrew';
   const show = (s) => (heb && !app.settings.display.cantillation ? stripCantillation(s || '') : s || '');
@@ -93,15 +94,18 @@ export async function renderWordStudy(box, id, { translation = 'KJV' } = {}) {
   const occHead = el('span');
   const filterChips = el('span', { style: { display: 'inline-flex', gap: '.3rem' } });
   const moreBtn = el('button', { class: 'btn', text: 'Show more', on: { click: () => loadOcc(false) } });
-  let offset = 0;
+  let offset = 0, occSeq = 0;
   async function loadOcc(reset) {
-    if (reset) { offset = 0; put(occList); }
+    const seq = ++occSeq;
+    if (reset) offset = 0;
     put(filterChips, ...[
       filter.book && el('span', { class: 'filterchip' }, app.book[filter.book].name,
         el('button', { text: '×', attrs: { 'aria-label': 'Clear book filter' }, on: { click: () => { filter.book = null; renderChart(); loadOcc(true); } } })),
     ].filter(Boolean));
     const r = await api(`/api/word/${encodeURIComponent(d.strongs)}/occurrences`,
       { params: { translation, book: filter.book, sense: filter.sense, offset, limit: 25 } });
+    if (seq !== occSeq || !alive()) return;           // a newer filter or another word replaced this
+    if (reset) put(occList);
     occHead.textContent = `${plural(r.total, 'verse')}`;
     for (const o of r.results) {
       occList.append(el('div', { class: 'occ', attrs: { role: 'button', tabindex: '0' },

@@ -27,7 +27,7 @@ def isolated_user_db(tmp_path, monkeypatch):
 def client():
     from fastapi.testclient import TestClient
     from scriptoria.server import app
-    with TestClient(app) as c:
+    with TestClient(app, headers={"X-Scriptoria": "1"}) as c:
         yield c
 
 

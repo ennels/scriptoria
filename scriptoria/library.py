@@ -65,9 +65,9 @@ def install(con: sqlite3.Connection, code: str) -> dict:
     e = entry(code)
     if not e:
         raise KeyError(code)
-    with _lock:
-        raw, origin = fetch(e["abbr"])
-        rows = rows_from_json(json.loads(raw.decode("utf-8-sig")))
+    raw, origin = fetch(e["abbr"])                  # download/parse outside the lock
+    rows = rows_from_json(json.loads(raw.decode("utf-8-sig")))
+    with _lock:                                     # one writer at a time
         result = install_rows(con, rows, code=e["code"], name=e["name"], language=e["language"],
                               language_name=e["language_name"], direction=e["direction"],
                               fts=e["fts"], source=f"thiagobodruk:{e['abbr']}")
@@ -76,5 +76,9 @@ def install(con: sqlite3.Connection, code: str) -> dict:
 
 
 def remove(con: sqlite3.Connection, code: str) -> bool:
+    """Remove a translation, refusing to remove the last readable one (checked under the lock)."""
     with _lock:
+        n = con.execute("SELECT COUNT(*) FROM translation WHERE kind = 'text' AND code <> ?", (code,)).fetchone()[0]
+        if n < 1:
+            raise ValueError("Keep at least one translation installed.")
         return remove_translation(con, code)

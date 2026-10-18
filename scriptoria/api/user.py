@@ -9,10 +9,11 @@ import re
 import sqlite3
 from datetime import date
 
-from fastapi import APIRouter, Body, Depends, HTTPException, Query
+from fastapi import APIRouter, Body, Depends, Header, HTTPException, Query
 from fastapi.responses import Response
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
+from .. import userdb
 from ..userdb import PROFILE_COLORS
 from .deps import BOOK, canon_key, profile_id, ref_label, user
 
@@ -34,14 +35,33 @@ def _chapter_range(book: str, chapter: int) -> tuple[str, str]:
 
 
 # --------------------------------------------------------------------- profiles
+def _name(v: str | None) -> str | None:
+    if v is None:
+        return None
+    v = " ".join(v.split())
+    if not v:
+        raise ValueError("Give the profile a name.")
+    return v
+
+
 class ProfileIn(BaseModel):
     name: str = Field(min_length=1, max_length=40)
     color: str = "lapis"
+
+    @field_validator("name")
+    @classmethod
+    def clean_name(cls, v):
+        return _name(v)
 
 
 class ProfilePatch(BaseModel):
     name: str | None = Field(default=None, min_length=1, max_length=40)
     color: str | None = None
+
+    @field_validator("name")
+    @classmethod
+    def clean_name(cls, v):
+        return _name(v)
 
 
 def _profile_row(u, pid):
@@ -55,8 +75,10 @@ def _profile_row(u, pid):
 
 
 @router.get("/profiles")
-def list_profiles(u: sqlite3.Connection = Depends(user), current: int = Depends(profile_id)):
+def list_profiles(x_profile: str | None = Header(default=None), u: sqlite3.Connection = Depends(user)):
     ids = [r[0] for r in u.execute("SELECT id FROM profile ORDER BY id")]
+    current = int(x_profile) if x_profile and x_profile.isascii() and x_profile.isdigit() and int(x_profile) in ids \
+        else userdb.default_profile(u)
     return {"current": current, "colors": PROFILE_COLORS, "profiles": [_profile_row(u, i) for i in ids]}
 
 
@@ -82,7 +104,9 @@ def update_profile(pid: int, p: ProfilePatch, u: sqlite3.Connection = Depends(us
 @router.delete("/profiles/{pid}")
 def delete_profile(pid: int, u: sqlite3.Connection = Depends(user)):
     _profile_row(u, pid)
+    u.execute("BEGIN IMMEDIATE")                 # count + delete as one step
     if u.execute("SELECT COUNT(*) FROM profile").fetchone()[0] <= 1:
+        u.rollback()
         raise HTTPException(400, "Keep at least one profile.")
     u.execute("DELETE FROM profile WHERE id = ?", (pid,))
     u.commit()
@@ -197,8 +221,10 @@ def _query_notes(u, pid, osis=None, book=None, chapter=None, tag=None, q=None) -
         where.append("EXISTS (SELECT 1 FROM note_tag t WHERE t.note_id = n.id AND t.tag = ? COLLATE NOCASE)")
         args.append(tag)
     if q:
-        where.append("(n.body LIKE ? OR EXISTS (SELECT 1 FROM note_tag t WHERE t.note_id = n.id AND t.tag LIKE ?))")
-        args += [f"%{q}%", f"%{q}%"]
+        like = "%" + q.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
+        where.append("(n.body LIKE ? ESCAPE '\\' OR EXISTS (SELECT 1 FROM note_tag t WHERE t.note_id = n.id "
+                     "AND t.tag LIKE ? ESCAPE '\\'))")
+        args += [like, like]
     ids = [r[0] for r in u.execute(f"SELECT n.id FROM note n WHERE {' AND '.join(where)}", args)]
     notes = [_note(u, i, pid) for i in ids]
     notes.sort(key=lambda n: (canon_key(n["osis"]), n["created"]))

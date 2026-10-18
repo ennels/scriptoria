@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 
 from ..importers.originals import describe_alt_ref, describe_text_type
 from ..morph import expand_many
-from ..text import display_form, dstrong as norm_dstrong, reading_form, strongs_base
+from ..text import display_form, dstrong as norm_dstrong, reading_form, sanitize_lexicon_html, strongs_base
 from .deps import BOOK, content, placeholders, ref_label
 
 router = APIRouter(prefix="/api")
@@ -22,7 +22,7 @@ def _translation_id(con: sqlite3.Connection, code: str | None) -> int | None:
 
 
 @router.get("/verse/{osis}/crossrefs")
-def crossrefs(osis: str, translation: str = "KJV", limit: int = Query(40, le=200),
+def crossrefs(osis: str, translation: str = "KJV", limit: int = Query(40, ge=1, le=200),
               con: sqlite3.Connection = Depends(content)):
     tid = _translation_id(con, translation)
     rows = con.execute(
@@ -110,6 +110,8 @@ def word_study(wid: str, con: sqlite3.Connection = Depends(content)):
     entries = [dict(r) for r in con.execute(
         "SELECT dstrong, strongs, language, lemma, translit, pos, gloss, definition, relation "
         "FROM lexicon WHERE strongs = ? ORDER BY dstrong", (base,))]
+    for e in entries:
+        e["definition"] = sanitize_lexicon_html(e["definition"])   # cheap; never trust the file blindly
     strongs = con.execute("SELECT * FROM strongs WHERE id = ?", (base,)).fetchone()
     occ = con.execute("SELECT text, morph, gloss, dstrong, language FROM original_word WHERE strongs = ?",
                       (base,)).fetchall()
@@ -158,7 +160,8 @@ def word_study(wid: str, con: sqlite3.Connection = Depends(content)):
 
 @router.get("/word/{wid}/occurrences")
 def occurrences(wid: str, translation: str = "KJV", book: str | None = None, sense: str | None = None,
-                offset: int = 0, limit: int = Query(40, le=200), con: sqlite3.Connection = Depends(content)):
+                offset: int = Query(0, ge=0), limit: int = Query(40, ge=1, le=200),
+                con: sqlite3.Connection = Depends(content)):
     _, base, _ = _word_filter(wid)
     where, args = ["w.strongs = ?"], [base]
     if book:

@@ -75,8 +75,19 @@ def remove_translation(con: sqlite3.Connection, code: str) -> bool:
     else:                           # external-content index: tell FTS which text to remove
         con.execute(f"INSERT INTO {fts}({fts}, rowid, text) "
                     "SELECT 'delete', id, text FROM verse_text WHERE translation_id=?", (tid,))
+    con.execute("CREATE TEMP TABLE IF NOT EXISTS _removed(id INTEGER PRIMARY KEY)")
+    con.execute("DELETE FROM _removed")
+    con.execute("INSERT INTO _removed SELECT verse_id FROM verse_text WHERE translation_id=?", (tid,))
     con.execute("DELETE FROM verse_text WHERE translation_id=?", (tid,))
     con.execute("DELETE FROM translation WHERE id=?", (tid,))
+    # Verse rows only this translation used (e.g. Dan.3.95 from a Catholic numbering) go too.
+    con.execute(
+        "DELETE FROM verse WHERE id IN (SELECT r.id FROM _removed r "
+        " WHERE NOT EXISTS (SELECT 1 FROM verse_text t WHERE t.verse_id = r.id)"
+        "   AND NOT EXISTS (SELECT 1 FROM original_word w WHERE w.verse_id = r.id)) "
+        "AND id NOT IN (SELECT from_verse_id FROM cross_ref) AND id NOT IN (SELECT to_verse_id FROM cross_ref) "
+        "AND id NOT IN (SELECT to_end_id FROM cross_ref WHERE to_end_id IS NOT NULL)")
+    con.execute("DELETE FROM _removed")
     con.commit()
     return True
 

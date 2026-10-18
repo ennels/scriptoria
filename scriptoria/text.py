@@ -63,6 +63,7 @@ def display_form(word: str, language: str) -> str:
 _REF_TAG = re.compile(r"<ref=['\"]([^'\"]+)['\"]>(.*?)</ref>", re.S | re.I)
 _ALLOWED = {"b", "i", "br", "sup", "sub"}
 _TAG = re.compile(r"<\s*(/?)\s*([a-zA-Z0-9]+)[^>]*>")
+_OWN_LINK = re.compile(r'<a class="sref" data-ref="([^"<>]*)">(.*?)</a>', re.S)
 
 
 def sanitize_lexicon_html(raw: str | None) -> str:
@@ -71,11 +72,13 @@ def sanitize_lexicon_html(raw: str | None) -> str:
     result is safe to render with innerHTML."""
     if not raw:
         return ""
+    raw = re.sub("[\x00\ue000\ue001]", "", raw)
+    raw = _OWN_LINK.sub(lambda m: f"<ref='{html.unescape(m.group(1))}'>{m.group(2)}</ref>", raw)   # idempotent
     refs: list[tuple[str, str]] = []
 
     def stash(m):
         refs.append((m.group(1).strip(), _TAG.sub("", m.group(2))))
-        return f"\x00{len(refs) - 1}\x00"
+        return f"\ue000{len(refs) - 1}\ue001"
 
     s = raw
     for _ in range(3):                      # refs can be nested one level deep
@@ -94,11 +97,11 @@ def sanitize_lexicon_html(raw: str | None) -> str:
 
     def unstash(m):
         ref, label = refs[int(m.group(1))]
-        label = re.sub(r"\x00(\d+)\x00", lambda mm: refs[int(mm.group(1))][1], label)
+        label = re.sub("\ue000(\\d+)\ue001", lambda mm: refs[int(mm.group(1))][1], label)
         return (f'<a class="sref" data-ref="{html.escape(ref)}">'
                 f"{html.escape(html.unescape(label), quote=False)}</a>")
 
     for _ in range(3):
-        s = re.sub(r"\x00(\d+)\x00", unstash, s)
+        s = re.sub("\ue000(\\d+)\ue001", unstash, s)
     s = re.sub(r"(<br>\s*){3,}", "<br><br>", s).strip()
     return re.sub(r"^(<br>\s*)+|(<br>\s*)+$", "", s)

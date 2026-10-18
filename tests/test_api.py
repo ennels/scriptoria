@@ -140,7 +140,7 @@ def test_library_install_and_remove(content_copy, monkeypatch):
     monkeypatch.setenv("SCRIPTORIA_BIBLES", str(BIBLES_ZIP))
     from fastapi.testclient import TestClient
     from scriptoria.server import app
-    with TestClient(app) as c:
+    with TestClient(app, headers={"X-Scriptoria": "1"}) as c:
         r = c.post("/api/library/KEHM")                          # Arabic, right-to-left
         assert r.status_code == 200 and r.json()["verses"] > 30000
         t = next(t for t in c.get("/api/translations").json() if t["code"] == "KEHM")
@@ -151,3 +151,11 @@ def test_library_install_and_remove(content_copy, monkeypatch):
         assert c.delete("/api/library/KEHM").status_code == 200
         assert "KEHM" not in {t["code"] for t in c.get("/api/translations").json()}
         assert c.get("/api/search", params={"q": "love", "translations": "KJV"}).json()["total"] > 0
+        # verse rows only a removed translation used are cleaned up (Douay-Rheims numbers Daniel 3 to 100)
+        assert c.get("/api/chapter", params={"book": "Dan", "chapter": 3, "translations": "DRA"}).json()["verses"][-1]["verse"] > 90
+        assert c.delete("/api/library/DRA").status_code == 200
+        from scriptoria import db
+        con = db.connect(must_exist=True)
+        assert con.execute("SELECT COUNT(*) FROM verse WHERE osis = 'Dan.3.95'").fetchone()[0] == 0
+        assert con.execute("SELECT COUNT(*) FROM verse WHERE osis = 'Dan.3.30'").fetchone()[0] == 1
+        con.close()

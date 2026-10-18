@@ -50,6 +50,8 @@ def install(code: str, con: sqlite3.Connection = Depends(content)):
         raise HTTPException(404, f"{code} isn't in the library catalog.")
     try:
         result = library.install(con, e["code"])
+    except urllib.error.HTTPError as ex:
+        raise HTTPException(502, f"The library source doesn't have {e['name']} right now (HTTP {ex.code}).") from ex
     except urllib.error.URLError as ex:
         raise HTTPException(502, "Couldn't download that translation, and no local copy of the bible zip "
                                  "was found. Connect to the internet once, or put bible.zip in the "
@@ -64,8 +66,8 @@ def remove(code: str, con: sqlite3.Connection = Depends(content)):
         raise HTTPException(404, f"{code} isn't installed.")
     if r["kind"] == "original":
         raise HTTPException(400, "The Hebrew/Greek texts are part of the study data and can't be removed.")
-    n = con.execute("SELECT COUNT(*) FROM translation WHERE kind = 'text'").fetchone()[0]
-    if n <= 1:
-        raise HTTPException(400, "Keep at least one translation installed.")
-    library.remove(con, code.upper())
+    try:
+        library.remove(con, code.upper())
+    except ValueError as ex:
+        raise HTTPException(400, str(ex)) from ex
     return {"removed": code.upper()}

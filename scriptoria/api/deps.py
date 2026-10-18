@@ -57,10 +57,15 @@ def user() -> Iterator[sqlite3.Connection]:
 
 def profile_id(x_profile: str | None = Header(default=None),
                u: sqlite3.Connection = Depends(user)) -> int:
-    if x_profile and x_profile.isdigit():
-        if u.execute("SELECT 1 FROM profile WHERE id=?", (int(x_profile),)).fetchone():
-            return int(x_profile)
-    return userdb.default_profile(u)
+    """The profile named by the X-Profile header. No header means the first profile; an
+    unknown or deleted id is refused, so a stale tab can't write into someone else's notes."""
+    if not x_profile:
+        return userdb.default_profile(u)
+    if not (x_profile.isascii() and x_profile.isdigit()):
+        raise HTTPException(400, "X-Profile must be a profile number")
+    if not u.execute("SELECT 1 FROM profile WHERE id=?", (int(x_profile),)).fetchone():
+        raise HTTPException(409, "PROFILE_GONE: that profile no longer exists — choose who's reading again.")
+    return int(x_profile)
 
 
 def osis_parts(osis: str) -> tuple[str, int, int]:

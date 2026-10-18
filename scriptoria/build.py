@@ -108,6 +108,14 @@ def main(argv=None) -> int:
 
     db_path = Path(args.db)
     if db_path.exists():
+        from . import userdb                      # first-release notes lived in this file: save them first
+        ucon = userdb.connect()
+        try:
+            moved = userdb.import_legacy_notes(ucon, db_path)
+        finally:
+            ucon.close()
+        if moved:
+            print(f"  kept {moved} note(s)/highlight(s) from the old database in {config.user_db()}")
         db_path.unlink()                              # always a clean build
     for ext in ("-wal", "-shm"):
         Path(str(db_path) + ext).unlink(missing_ok=True)

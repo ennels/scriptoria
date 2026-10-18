@@ -79,8 +79,11 @@ export class Study {
     else if (k === 'inter') done(this.renderInterlinear(token));
     else if (k === 'word') {
       if (!this.wordId) { put(this.panel, el('p', { class: 'empty', text: 'Click a Hebrew or Greek word (in the Interlinear tab, or in the reader with interlinear on) to study it.' })); return; }
-      done(renderWordStudy(this.panel, this.wordId, { translation: this.translation }));
-    } else if (k === 'notes') done(renderNotesTab(this.panel, this.osis, { onChange: () => emit('annotations-changed', { osis: this.osis }) }));
+      done(renderWordStudy(this.panel, this.wordId, { translation: this.translation, alive: () => this.token === token }));
+    } else if (k === 'notes') {
+      const osis = this.osis;
+      done(renderNotesTab(this.panel, osis, { onChange: () => emit('annotations-changed', { osis }), alive: () => this.token === token }));
+    }
   }
 
   async renderXrefs(token) {

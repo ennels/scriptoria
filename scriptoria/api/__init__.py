@@ -3,9 +3,12 @@ from __future__ import annotations
 
 from contextlib import asynccontextmanager
 
+from urllib.parse import urlsplit
+
 from fastapi import FastAPI, Request
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from .. import config, userdb
 
@@ -35,12 +38,29 @@ def create_app() -> FastAPI:
     for r in (reading.router, study.router, search.router, library_api.router, user.router):
         app.include_router(r)
 
+    hosts = config.allowed_hosts()
+
+    @app.middleware("http")
+    async def guard_writes(request: Request, call_next):
+        """Changes need the app's own X-Scriptoria header (a cross-site form or script can't
+        send it without a CORS preflight, which is never granted), and a foreign Origin is
+        refused outright."""
+        origin = request.headers.get("origin")
+        if origin and origin != "null" and urlsplit(origin).hostname not in {h.strip("[]") for h in hosts}:
+            return JSONResponse({"detail": "Requests from other sites are not allowed."}, status_code=403)
+        if (request.url.path.startswith("/api/") and request.method not in ("GET", "HEAD", "OPTIONS")
+                and request.headers.get("x-scriptoria") != "1"):
+            return JSONResponse({"detail": "Missing X-Scriptoria header."}, status_code=403)
+        return await call_next(request)
+
     @app.middleware("http")
     async def revalidate_assets(request: Request, call_next):
         resp = await call_next(request)
         if not request.url.path.startswith("/api/"):
             resp.headers["Cache-Control"] = "no-cache"     # always check for updated files after git pull
         return resp
+
+    app.add_middleware(TrustedHostMiddleware, allowed_hosts=hosts)
 
     if WEB.exists():
         app.mount("/assets", StaticFiles(directory=WEB / "assets"), name="assets")

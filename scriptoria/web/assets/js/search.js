@@ -58,17 +58,24 @@ export function renderSearchView(host, init, { onClose }) {
   scopeSel.addEventListener('change', () => { range.hidden = scopeSel.value !== 'range'; s.scope = scopeValue(); persist('search'); });
   for (const sel of [fromSel, toSel]) sel.addEventListener('change', () => { s.scope = scopeValue(); persist('search'); });
 
-  let offset = 0, last = null;
+  let offset = 0, last = null, lastParams = null, seq = 0;
   async function run(more = false) {
-    const text = q.value.trim();
-    if (!text) { q.focus(); return; }
-    s.scope = scopeValue();
-    if (!more) offset = 0;
-    const params = { q: text, mode: s.mode, translations: s.translations.join(','), scope: s.scope, offset, limit: 50 };
-    if (!more) put(out, el('p', { class: 'muted', text: 'Searching…' }));
+    let params;
+    if (more && lastParams) params = { ...lastParams, offset };      // continue the results on screen
+    else {
+      const text = q.value.trim();
+      if (!text) { q.focus(); return; }
+      s.scope = scopeValue();
+      offset = 0;
+      params = { q: text, mode: s.mode, translations: s.translations.join(','), scope: s.scope, offset, limit: 50 };
+      put(out, el('p', { class: 'muted', text: 'Searching…' }));
+    }
+    const mine = ++seq;
     let d;
     try { d = await api('/api/search', { params }); }
-    catch (e) { put(out, el('div', { class: 'note-banner', text: e.message })); return; }
+    catch (e) { if (mine === seq) put(out, el('div', { class: 'note-banner', text: e.message })); return; }
+    if (mine !== seq) return;                                        // a newer search replaced this one
+    lastParams = { ...params, offset: 0 };
     if (d.reference) { emit('navigate', { osis: d.reference.osis, book: d.reference.book, chapter: d.reference.chapter }); onClose(); return; }
     last = d;
     const items = d.results.map(resultItem);

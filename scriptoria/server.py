@@ -27,13 +27,13 @@ def _already_running() -> bool:
     import socket
     with socket.socket() as s:
         s.settimeout(0.3)
-        return s.connect_ex((HOST, PORT)) == 0
+        return s.connect_ex(("127.0.0.1", PORT)) == 0
 
 
 def run():
     import threading
     import uvicorn
-    url = f"http://{HOST}:{PORT}"
+    url = f"http://127.0.0.1:{PORT}"
     if _already_running():                     # e.g. launcher clicked twice
         print(f"Scriptoria is already running at {url}; opening it.")
         _open_browser(url)

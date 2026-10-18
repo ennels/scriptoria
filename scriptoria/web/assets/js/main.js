@@ -1,5 +1,5 @@
 // Scriptoria front end: boot, layout, and the wiring between panes, study panel and views.
-import { $, api, app, el, emit, mergeSettings, on, persist, setProfileId, storedProfileId, toast, put } from './core.js';
+import { $, api, app, el, emit, flushSettings, mergeSettings, on, persist, put, setProfileId, storedProfileId, toast } from './core.js';
 import { applyScale, applyTheme, openDisplay } from './display.js';
 import { openLibrary } from './library.js';
 import { renderNotesView } from './notes.js';
@@ -214,6 +214,7 @@ function wire() {
   on('search', (init) => openSearch(init));
   on('profiles-changed', () => loadProfiles());
   on('switch-profile', async (id) => {
+    await flushSettings();
     setProfileId(id);
     await loadProfiles();
     app.settings = mergeSettings(await api('/api/settings'));

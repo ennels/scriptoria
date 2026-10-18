@@ -15,7 +15,15 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 PACKAGE = Path(__file__).resolve().parent
 
-HOST, PORT = "127.0.0.1", 8701
+HOST = os.environ.get("SCRIPTORIA_HOST", "127.0.0.1")      # 0.0.0.0 = reachable from the home network
+PORT = int(os.environ.get("SCRIPTORIA_PORT", "8701"))
+
+
+def allowed_hosts() -> list[str]:
+    """Host names the server answers to. Blocks DNS-rebinding pages from reaching the local
+    API. Add LAN names with SCRIPTORIA_ALLOWED_HOSTS="mybox.local,192.168.1.20"."""
+    extra = [h.strip() for h in os.environ.get("SCRIPTORIA_ALLOWED_HOSTS", "").split(",") if h.strip()]
+    return ["127.0.0.1", "localhost", "[::1]", "testserver", *extra]
 
 # Translation library source (MIT-licensed repo of 120+ versions, 67 languages).
 LIBRARY_RAW_URL = "https://raw.githubusercontent.com/thiagobodruk/bible/master/json/{abbr}.json"

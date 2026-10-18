@@ -72,6 +72,14 @@ uv run scriptoria
 Back up `user.db` to keep your notes. Paths can be overridden with `SCRIPTORIA_DB` and
 `SCRIPTORIA_USER_DB`.
 
+The server listens only on this computer (127.0.0.1) and refuses requests from other
+websites. To read from another device on your home network, start it with the address
+and names you'll use — there are no passwords, so only do this on a network you trust:
+
+```bash
+SCRIPTORIA_HOST=0.0.0.0 SCRIPTORIA_ALLOWED_HOSTS="mybox.local,192.168.1.20" uv run scriptoria
+```
+
 ## Using it
 
 | Key | Does |
@@ -113,7 +121,7 @@ never touches notes.
 
 ```bash
 uv sync --group dev
-uv run pytest            # 45 tests: parsing, sanitizing, migrations, API end to end
+uv run pytest            # 57 tests: parsing, sanitizing, migrations, API, hardening
 ```
 
 ```

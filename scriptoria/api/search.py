@@ -32,7 +32,8 @@ FTS = {"en": "fts_en", "intl": "fts_intl", "cjk": "fts_cjk", "orig": "fts_orig"}
 MODES = ("auto", "all", "phrase", "any", "advanced", "original")
 _OPEN, _CLOSE = "\x01", "\x02"
 _STRONGS = re.compile(r"^([GHgh])0*(\d+)([A-Za-z]?)$")
-_TOKEN = re.compile(r"[\w'’]+\*?")
+_TOKEN = re.compile(r"[\w'’\u0300-\u036f\u0591-\u05c7\u1dc0-\u1dff]+\*?")
+_OPERATORS = {"AND", "OR", "NOT"}
 
 
 def tokens(q: str) -> list[str]:
@@ -95,11 +96,15 @@ def _like_snippet(text: str, toks: list[str]) -> str:
 
 
 def _orig_terms(q: str, mode: str) -> tuple[str, list[tuple[str, bool]]]:
-    """Folded FTS expression for the Hebrew/Greek index, plus the terms for highlighting."""
-    terms = [(fold(t.rstrip("*")), t.endswith("*")) for t in tokens(q)]
+    """Folded FTS expression for the Hebrew/Greek index, plus the terms for highlighting.
+    Advanced mode keeps AND/OR/NOT/NEAR and quotes, folding only the words."""
+    terms = [(fold(t.rstrip("*")), t.endswith("*")) for t in tokens(q) if t not in _OPERATORS and t != "NEAR"]
     terms = [(t, star) for t, star in terms if t]
     if not terms:
         raise HTTPException(400, "Type at least one Hebrew or Greek word to search for.")
+    if mode == "advanced":
+        return re.sub(r'[^\s"(),*:^]+', lambda m: m.group(0) if m.group(0) in _OPERATORS or m.group(0) == "NEAR"
+                      or m.group(0).isdigit() else fold(m.group(0)) or m.group(0), q), terms
     if mode == "phrase":
         return '"' + " ".join(t for t, _ in terms) + '"', terms
     quoted = [f'"{t}"' + ("*" if star else "") for t, star in terms]
@@ -134,7 +139,7 @@ def _text_search(con, q, mode, trs, lo, hi, offset, limit):
         short_cjk = fts == "cjk" and mode != "advanced" and any(len(t.rstrip("*")) < 3 for t in toks)
         try:
             if fts == "orig":   # Hebrew/Greek: folded index, highlight the pointed/accented text
-                oexpr, terms = _orig_terms(q, "all" if mode == "advanced" else mode)
+                oexpr, terms = _orig_terms(q, mode)
                 base = (f"FROM fts_orig JOIN verse_text vt ON vt.id = fts_orig.rowid "
                         f"JOIN verse v ON v.id = vt.verse_id WHERE fts_orig MATCH ? "
                         f"AND vt.translation_id IN ({ph}) AND v.book_id BETWEEN ? AND ?")
@@ -240,6 +245,7 @@ def search(q: str, mode: str = "auto", translations: str = "KJV", scope: str = "
            con: sqlite3.Connection = Depends(content)):
     if mode not in MODES:
         raise HTTPException(400, f"mode must be one of {', '.join(MODES)}")
+    want_orig = False
     q = unicodedata.normalize("NFC", q).strip()
     if not q:
         raise HTTPException(400, "Type something to search for.")
@@ -248,7 +254,10 @@ def search(q: str, mode: str = "auto", translations: str = "KJV", scope: str = "
         if ref and any(ch.isdigit() for ch in q):
             return {"reference": {"book": ref.book, "chapter": ref.chapter, "verse": ref.verse,
                                   "osis": ref.osis, "label": ref.label()}}
-        mode = "original" if (_STRONGS.match(q.rstrip("*")) or is_original_script(q)) else "all"
+        if is_original_script(q) and len(tokens(q)) > 1:
+            mode, want_orig = "all", True          # several Greek/Hebrew words: search the original texts
+        else:
+            mode = "original" if (_STRONGS.match(q.rstrip("*")) or is_original_script(q)) else "all"
 
     lo, hi, scope_label = scope_range(scope)
     allrows = con.execute("SELECT id, code, fts, kind FROM translation").fetchall()
@@ -259,6 +268,8 @@ def search(q: str, mode: str = "auto", translations: str = "KJV", scope: str = "
         trs = [tmap[c] for c in dict.fromkeys(x.strip().upper() for x in translations.split(",")) if c in tmap]
     if not trs:
         trs = [tmap["KJV"]] if "KJV" in tmap else allrows[:1]
+    if want_orig and not any(t["kind"] == "original" for t in trs) and "ORIG" in tmap:
+        trs = [tmap["ORIG"]]
 
     out = {"query": q, "mode": mode, "scope": scope_label, "translations": [t["code"] for t in trs],
            "offset": offset, "limit": limit}

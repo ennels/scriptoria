@@ -14,12 +14,17 @@ SCHEMA = config.PACKAGE / "schema.sql"
 def connect(db_path: str | Path | None = None, *, must_exist: bool = False) -> sqlite3.Connection:
     path = Path(db_path or config.content_db())
     if must_exist:
-        con = sqlite3.connect(f"file:{path}?mode=rw", uri=True, check_same_thread=False)
+        con = sqlite3.connect(uri_for(path, "rw"), uri=True, check_same_thread=False)
     else:
         con = sqlite3.connect(str(path), check_same_thread=False)
     con.row_factory = sqlite3.Row
     con.execute("PRAGMA foreign_keys = ON")
     return con
+
+
+def uri_for(path: str | Path, mode: str) -> str:
+    """SQLite URI with the path percent-encoded, so '#' or '?' in a folder name is safe."""
+    return f"{Path(path).resolve().as_uri()}?mode={mode}"
 
 
 def init_schema(con: sqlite3.Connection) -> None:

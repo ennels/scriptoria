@@ -104,13 +104,19 @@ def import_legacy_notes(user: sqlite3.Connection, content_path: str | Path) -> i
     marker = f"legacy_import:{content_path.resolve()}"
     if user.execute("SELECT 1 FROM meta WHERE key=?", (marker,)).fetchone():
         return 0
+    from .db import uri_for
     try:
-        src = sqlite3.connect(f"file:{content_path}?mode=ro", uri=True)
-        rows = src.execute("SELECT v.osis, n.color, n.body, n.created, n.updated FROM note n "
-                           "JOIN verse v ON v.id = n.verse_id").fetchall()
-        src.close()
+        src = sqlite3.connect(uri_for(content_path, "ro"), uri=True)
     except sqlite3.Error:
-        rows = []
+        return 0                                   # unreadable now; try again next start
+    try:
+        has_notes = src.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='note'").fetchone()
+        rows = src.execute("SELECT v.osis, n.color, n.body, n.created, n.updated FROM note n "
+                           "JOIN verse v ON v.id = n.verse_id").fetchall() if has_notes else []
+    except sqlite3.Error:
+        return 0
+    finally:
+        src.close()
     pid = default_profile(user)
     for osis, color, body, created, updated in rows:
         if color:
