@@ -1,0 +1,11 @@
+# Downloaded source data (fetched by build.py; each has its own license) and the built DB
+data/
+*.db
+*.db-wal
+*.db-shm
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.ruff_cache/
